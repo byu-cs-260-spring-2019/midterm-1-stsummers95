@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GudReads</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div id="app">
+      <h1>Welcome to GudReads!</h1>
+      <p>Enter a word/phrase/title for the book you are looking for, and hit Search!</p>
+      <form>
+        <input type="text" placeholder="word/phrase/title" v-model="searchValue">
+        <button type="button"i v-on:click="search">Search</button>
+      </form>
+      <div v-if="firstSearchComplete">
+        <div v-if="loading">
+          <p>Loading. . .</p>
+        </div>
+        <div id="resultList" v-else>
+          <p>Results displayed: {{current.docs.length}}</p>
+          <div class="bookResult" v-for="book in current.docs.length">
+            <span v-if="current.docs[book-1].thumbnail"><img v-bind:src="current.docs[book-1].thumbnail" style="float:left;margin:10px;"></span>
+            <p>{{current.docs[book-1].title}}</p>
+            <p v-if="current.docs[book-1].author_name">Author: {{current.docs[book-1].author_name[0]}}</p>
+            <p v-if="current.docs[book-1].publish_date">Publish Date: {{current.docs[book-1].publish_date[0]}}</p>
+            <button v-bind:id="'b' + book">Favorite</button>
+            <hr>
+          </div>
+        </div>
+      </div>
+      <div v-else>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="script.js"></script>
+
+</html>
