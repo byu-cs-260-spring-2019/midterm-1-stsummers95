@@ -2,33 +2,54 @@
 <html>
   <head>
     <title>GudReads</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
     <div id="app">
       <h1>Welcome to GudReads!</h1>
-      <p>Enter a word/phrase/title for the book you are looking for, and hit Search!</p>
-      <form>
-        <input type="text" placeholder="word/phrase/title" v-model="searchValue">
-        <button type="button"i v-on:click="search">Search</button>
-      </form>
-      <div v-if="firstSearchComplete">
-        <div v-if="loading">
-          <p>Loading. . .</p>
-        </div>
-        <div id="resultList" v-else>
-          <p>Results displayed: {{current.docs.length}}</p>
-          <div class="bookResult" v-for="book in current.docs.length">
-            <span v-if="current.docs[book-1].thumbnail"><img v-bind:src="current.docs[book-1].thumbnail" style="float:left;margin:10px;"></span>
-            <p>{{current.docs[book-1].title}}</p>
-            <p v-if="current.docs[book-1].author_name">Author: {{current.docs[book-1].author_name[0]}}</p>
-            <p v-if="current.docs[book-1].publish_date">Publish Date: {{current.docs[book-1].publish_date[0]}}</p>
-            <button v-bind:id="'b' + book">Favorite</button>
-            <hr>
+      <button class="page selected" id="searchButton" v-on:click="pageSearch">Search for books</button>
+      <button class="page" id="favoriteButton" v-on:click="pageFavorite">View favorites</button>
+      <div v-if="searchPage">
+        <p>Enter a word/phrase/title for the book you are looking for, and hit Search!</p>
+        <form>
+          <input type="text" placeholder="word/phrase/title" v-model="searchValue">
+          <button type="button"i v-on:click="search">Search</button>
+        </form>
+        <div v-if="firstSearchComplete">
+          <div v-if="loading">
+            <p>Loading. . .</p>
           </div>
+          <div id="resultList" v-else>
+            <p>Results displayed: {{current.docs.length}}</p>
+            <div class="bookResult" v-for="book in current.docs.length">
+              <div class="resultItem">
+                <span v-if="current.docs[book-1].thumbnail"><img v-bind:src="current.docs[book-1].thumbnail" style="float:left;margin:10px;"></span>
+                <p>{{current.docs[book-1].title}}</p>
+                <p v-if="current.docs[book-1].author_name">Author: {{current.docs[book-1].author_name[0]}}</p>
+                <p v-if="current.docs[book-1].publish_date">Publish Date: {{current.docs[book-1].publish_date[0]}}</p>
+                <button v-bind:id="'b' + book" v-on:click="favoriteBook(book)">Favorite</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else>
         </div>
       </div>
       <div v-else>
+        <div id="favoriteList">
+          <p>Number of favorites: {{favorites.length}}</p>
+          <div class="bookResult" v-for="book in favorites.length">
+            <div class="resultItem">
+              <span v-if="favorite[book-1].thumbnail"><img v-bind:src="favorites[book-1].thumbnail" style="float:left;margin:10px;"></span>
+              <p>{{favorites[book-1].title}}</p>
+              <p v-if="favorites[book-1].author_name">Author: {{favorites[book-1].author_name[0]}}</p>
+              <p v-if="favorites[book-1].publish_date">Publish Date: {{favorites[book-1].publish_date[0]}}</p>
+              <button v-bind:id="'f' + book" v-on:click="unfavorite">Unfavorite</button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </body>
